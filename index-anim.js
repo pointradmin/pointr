@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initHeroGrow();
     initNav();
     // initFeatures();
-    //initPeople();
+    // initPeople();
     // initFooter();
     initContactHover();
   });
@@ -160,40 +160,55 @@ function initLogoRing() {
 }
 
 /* ============================================================
-   2. NAV — slide down on load
+   2. NAV — slide down on load + scroll-triggered CTA swap
    ============================================================ */
 function initNav() {
-  // Entrance — slide down after hero text lands
+  const navSocials = document.querySelector(".nav-socials");
+  const navCta     = document.querySelector(".nav-cta");
+  const heroCta    = document.querySelector(".hero-grow-cta");
+
+  /* ── Entrance — slide down after hero sequence ── */
   gsap.from(".nav", {
     y: -48,
     autoAlpha: 0,
     duration: 0.6,
-    ease: "power1.out",
+    ease: "power4.out",
     clearProps: "transform,opacity,visibility",
-    delay: 7.5,
+    delay: 5.5,
   });
 
-  // Scroll: only deepen the shadow slightly — don't change the glass itself
-  let scrolled = false;
+  if (!heroCta || !navSocials || !navCta) return;
+
+  /* ── Swap: socials out / CTA in when hero-grow-cta scrolls out of view ── */
+  const DUR      = 0.3;
+  const EASE_IN  = "power2.in";
+  const EASE_OUT = "power2.out";
+
+  function showCta() {
+    gsap.to(navSocials, { autoAlpha: 0, x: -10, duration: DUR, ease: EASE_IN, overwrite: "auto" });
+    gsap.to(navCta, {
+      autoAlpha: 1, x: 0, duration: DUR, ease: EASE_OUT,
+      delay: DUR * 0.7, overwrite: "auto",
+      onStart: () => { navCta.style.pointerEvents = "auto"; },
+    });
+  }
+
+  function showSocials() {
+    gsap.to(navCta, {
+      autoAlpha: 0, x: 10, duration: DUR, ease: EASE_IN, overwrite: "auto",
+      onComplete: () => { navCta.style.pointerEvents = "none"; },
+    });
+    gsap.to(navSocials, {
+      autoAlpha: 1, x: 0, duration: DUR, ease: EASE_OUT,
+      delay: DUR * 0.7, overwrite: "auto",
+    });
+  }
+
   ScrollTrigger.create({
-    start: "top -60",
-    onEnter: () => {
-      if (scrolled) return;
-      scrolled = true;
-      gsap.to(".nav", {
-        duration: 0.4,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-    },
-    onLeaveBack: () => {
-      scrolled = false;
-      gsap.to(".nav", {
-        duration: 0.4,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-    },
+    trigger: heroCta,
+    start: "top top",   /* fires when hero-grow-cta top hits the nav */
+    onEnter:     showCta,
+    onLeaveBack: showSocials,
   });
 }
 
@@ -235,40 +250,59 @@ function initHeroActions() {
   const btns = gsap.utils.toArray(".action-btn");
   if (!btns.length) return;
 
-  gsap.from(btns, {
-    y: 0,
-    autoAlpha: 0,
-    scale: 1,
-    duration: 0.65,
-    ease: "power4.out",
-    stagger: { each: 0.45, from: "start" },
-    delay: 5.5,
-    clearProps: "transform,opacity,visibility",
-  });
+  function createShimmer() {
+    const s = document.createElement("div");
+    s.style.cssText = `
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        315deg,
+        transparent             0%,
+        transparent             32%,
+        rgba(255,255,255,0.07)  42%,
+        rgba(255,255,255,0.45)  50%,
+        rgba(255,255,255,0.07)  58%,
+        transparent             68%,
+        transparent             100%
+      );
+      background-size: 300% 300%;
+      background-position: 100% 100%;
+      pointer-events: none;
+      z-index: 4;
+      border-radius: inherit;
+      will-change: background-position;
+    `;
+    return s;
+  }
 
-  function startFloatLoop() {
-    document.querySelectorAll(".action-icon").forEach((icon, i) => {
-      gsap.fromTo(icon,
-        { "--shimmer-pos": "-100%" },
-        {
-          "--shimmer-pos": "200%",
-          duration: 0.3,
-          ease: "power2.out",
-          delay: i * 0.12,
-        }
-      );
-      gsap.fromTo(icon,
-        { scale: 0.88, autoAlpha: 0 },
-        {
-          scale: 1,
-          autoAlpha: 1,
-          duration: 0.6,
-          ease: "back.out(2.4)",
-          delay: i * 0.12,
-        }
-      );
+  function sweep(btn) {
+    const s = createShimmer();
+    btn.style.position = "relative";
+    btn.appendChild(s);
+    gsap.to(s, {
+      backgroundPosition: "0% 0%",
+      duration: 1.8,
+      ease: "power1.inOut",
+      onComplete: () => s.remove(),
     });
   }
+
+  gsap.from(btns, {
+    autoAlpha: 0,
+    scale: 1,
+    x: -10,
+    duration: 0.65,
+    ease: "power4.out",
+    stagger: {
+      each: .25,
+      from: "start",
+      onStart: function() {
+        sweep(this.targets()[0]);
+      },
+    },
+    delay: 4,
+    clearProps: "transform,opacity,visibility",
+  });
 }
 
 /* ============================================================
@@ -361,10 +395,10 @@ function initHeroCard() {
   tl.to(allText, {
     filter: "blur(0px)",
     duration: UNBLUR_DUR,
-    ease: "power2.out",
+    ease: "power4.out",
     stagger: { each: STAGGER, from: "start" },
-    delay: 0.3,
-  }, "+=0.25");
+    delay: 0.4,
+  }, "+=0.15");
 }
 /* ============================================================
    6. HERO GROW — scroll-triggered reveal
@@ -515,61 +549,78 @@ function initPeople() {
 }
 
 /* ============================================================
-   PEOPLE — Contact icon SVG gradient hover animation
+   GRADIENT ANIMATION — nav socials (always-on) + contact btns (hover)
+   Both read from the single global <defs> in index.html.
    ============================================================ */
 function initContactHover() {
-  if (!document.querySelector('.contact-stop-a')) return;
-
   function lerpColor(a, b, amt) {
     const parse = hex => [
-      parseInt(hex.slice(1,3), 16),
-      parseInt(hex.slice(3,5), 16),
-      parseInt(hex.slice(5,7), 16)
+      parseInt(hex.slice(1, 3), 16),
+      parseInt(hex.slice(3, 5), 16),
+      parseInt(hex.slice(5, 7), 16),
     ];
-    const [r1,g1,b1] = parse(a);
-    const [r2,g2,b2] = parse(b);
-    return `rgb(${Math.round(r1+(r2-r1)*amt)},${Math.round(g1+(g2-g1)*amt)},${Math.round(b1+(b2-b1)*amt)})`;
+    const [r1, g1, b1] = parse(a);
+    const [r2, g2, b2] = parse(b);
+    return `rgb(${Math.round(r1 + (r2 - r1) * amt)},${Math.round(g1 + (g2 - g1) * amt)},${Math.round(b1 + (b2 - b1) * amt)})`;
   }
 
   const colors = ['#474ED7', '#EC458D', '#FFF1BF'];
 
-  document.querySelectorAll('.contact-btn').forEach(btn => {
-    // Scope stops to THIS button only
-    const stopsA = btn.querySelectorAll('.contact-stop-a');
-    const stopsB = btn.querySelectorAll('.contact-stop-b');
-    const stopsC = btn.querySelectorAll('.contact-stop-c');
-
-    let tween = null;
-
-    btn.addEventListener('mouseenter', () => {
-      if (tween) {
-        tween.resume();
-      } else {
-        tween = gsap.to({}, {
-          duration: 2,
-          repeat: -1,
-          ease: 'none',
-          onUpdate: function() {
-            const t = (this.progress() * 3) % 3;
-            const i0 = Math.floor(t) % 3;
-            const i1 = (i0 + 1) % 3;
-            const mix = t % 1;
-
-            const cA = lerpColor(colors[i0],       colors[i1],       mix);
-            const cB = lerpColor(colors[(i0+1)%3], colors[(i1+1)%3], mix);
-            const cC = lerpColor(colors[(i0+2)%3], colors[(i1+2)%3], mix);
-
-            stopsA.forEach(s => s.setAttribute('stop-color', cA));
-            stopsB.forEach(s => s.setAttribute('stop-color', cB));
-            stopsC.forEach(s => s.setAttribute('stop-color', cC));
-          }
-        });
-      }
+  function makeTween(stops, offset) {
+    return gsap.to({}, {
+      duration: 2,
+      repeat: -1,
+      ease: 'none',
+      onUpdate: function () {
+        const t   = ((this.progress() + offset) * 3) % 3;
+        const i0  = Math.floor(t) % 3;
+        const i1  = (i0 + 1) % 3;
+        const mix = t % 1;
+        stops[0].setAttribute('stop-color', lerpColor(colors[i0],         colors[i1],         mix));
+        stops[1].setAttribute('stop-color', lerpColor(colors[(i0+1) % 3], colors[(i1+1) % 3], mix));
+        stops[2].setAttribute('stop-color', lerpColor(colors[(i0+2) % 3], colors[(i1+2) % 3], mix));
+      },
     });
+  }
 
-    btn.addEventListener('mouseleave', () => {
-      if (tween) tween.pause();
-    });
+  /* ── Nav socials — always-on, pause on hover, resume on leave ── */
+  const navGrads = [
+    { id: 'nav-ig-grad',     offset: 0,    linkSelector: '.nav-social-link:nth-child(1)' },
+    { id: 'nav-email-grad',  offset: 0.33, linkSelector: '.nav-social-link:nth-child(2)' },
+    { id: 'nav-tiktok-grad', offset: 0.66, linkSelector: '.nav-social-link:nth-child(3)' },
+  ];
+  navGrads.forEach(({ id, offset, linkSelector }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const stops = el.querySelectorAll('stop');
+    if (!stops.length) return;
+
+    const tween = makeTween(stops, offset);
+
+    const link = document.querySelector(linkSelector);
+    if (!link) return;
+    link.addEventListener('mouseenter', () => tween.pause());
+    link.addEventListener('mouseleave', () => tween.resume());
+  });
+
+  /* ── Contact buttons — always-on, pause on hover, resume on leave ── */
+  const contactGrads = [
+    { id: 'ig-grad',     offset: 0    },
+    { id: 'email-grad',  offset: 0.33 },
+    { id: 'tiktok-grad', offset: 0.66 },
+  ];
+  document.querySelectorAll('.contact-btn').forEach((btn, i) => {
+    const gradDef = contactGrads[i];
+    if (!gradDef) return;
+    const el    = document.getElementById(gradDef.id);
+    if (!el) return;
+    const stops = el.querySelectorAll('stop');
+    if (!stops.length) return;
+
+    const tween = makeTween(stops, gradDef.offset);
+
+    btn.addEventListener('mouseenter', () => tween.pause());
+    btn.addEventListener('mouseleave', () => tween.resume());
   });
 }
 

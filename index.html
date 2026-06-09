@@ -38,6 +38,40 @@
         <stop offset="0%"   stop-color="#EC458D"/>
         <stop offset="100%" stop-color="#474ED7"/>
       </linearGradient>
+
+      <!-- People Social / contact animated gradients -->
+      <linearGradient id="ig-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop class="contact-stop-a" offset="0%"   stop-color="#474ED7"/>
+        <stop class="contact-stop-b" offset="50%"  stop-color="#EC458D"/>
+        <stop class="contact-stop-c" offset="100%" stop-color="#FFF1BF"/>
+      </linearGradient>
+      <linearGradient id="email-grad" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop class="contact-stop-a" offset="0%"   stop-color="#474ED7"/>
+        <stop class="contact-stop-b" offset="50%"  stop-color="#EC458D"/>
+        <stop class="contact-stop-c" offset="100%" stop-color="#FFF1BF"/>
+      </linearGradient>
+      <linearGradient id="tiktok-grad" x1="50%" y1="0%" x2="50%" y2="100%">
+        <stop class="contact-stop-a" offset="0%"   stop-color="#474ED7"/>
+        <stop class="contact-stop-b" offset="50%"  stop-color="#EC458D"/>
+        <stop class="contact-stop-c" offset="100%" stop-color="#FFF1BF"/>
+      </linearGradient>
+
+      <!-- Nav social gradients — always-on, independent directions -->
+      <linearGradient id="nav-ig-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop class="nav-stop-ig-a" offset="0%"   stop-color="#474ED7"/>
+        <stop class="nav-stop-ig-b" offset="50%"  stop-color="#EC458D"/>
+        <stop class="nav-stop-ig-c" offset="100%" stop-color="#FFF1BF"/>
+      </linearGradient>
+      <linearGradient id="nav-email-grad" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop class="nav-stop-email-a" offset="0%"   stop-color="#474ED7"/>
+        <stop class="nav-stop-email-b" offset="50%"  stop-color="#EC458D"/>
+        <stop class="nav-stop-email-c" offset="100%" stop-color="#FFF1BF"/>
+      </linearGradient>
+      <linearGradient id="nav-tiktok-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop class="nav-stop-tiktok-a" offset="0%"   stop-color="#474ED7"/>
+        <stop class="nav-stop-tiktok-b" offset="50%"  stop-color="#EC458D"/>
+        <stop class="nav-stop-tiktok-c" offset="100%" stop-color="#FFF1BF"/>
+      </linearGradient>
     </defs>
   </svg>
 
@@ -85,9 +119,52 @@
       </span>
       intr
     </a>
-    <a href="join.html" class="nav-cta" aria-label="Join the Pointr waitlist">
+    <!-- Right side: socials and CTA share the same slot -->
+    <div class="nav-right">
+
+    <!-- Social icons — visible by default, swap out when hero CTA leaves view -->
+    <div class="nav-socials" aria-label="Pointr social links">
+
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/pointr__/?hl=en"
+         class="nav-social-link"
+         aria-label="Follow Pointr on Instagram"
+         target="_blank" rel="noopener noreferrer">
+        <svg class="nav-social-svg" viewBox="0 0 24 24" fill="none" stroke="url(#nav-ig-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <circle cx="12" cy="12" r="5"/>
+          <circle cx="17.5" cy="6.5" r="0.5" fill="url(#ig-grad)" stroke="none"/>
+        </svg>
+      </a>
+
+      <!-- Email -->
+      <a href="mailto:pointradmin@gmail.com"
+         class="nav-social-link"
+         aria-label="Email the Pointr team">
+        <svg class="nav-social-svg" viewBox="0 0 24 24" fill="none" stroke="url(#nav-email-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="4" width="20" height="16" rx="3"/>
+          <polyline points="2,4 12,13 22,4"/>
+        </svg>
+      </a>
+
+      <!-- TikTok -->
+      <a href="https://www.tiktok.com/@pointr__?_r=1&_t=ZS-973GntUD7o5"
+         class="nav-social-link"
+         aria-label="Pointr TikTok page"
+         target="_blank" rel="noopener noreferrer">
+        <svg class="nav-social-svg" viewBox="0 0 24 24" fill="none" stroke="url(#nav-tiktok-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+        </svg>
+      </a>
+
+    </div>
+
+    <!-- Join waitlist CTA — hidden until hero CTA scrolls out of view -->
+    <a href="join.html" class="nav-cta" aria-label="Join the Pointr waitlist" style="opacity:0;pointer-events:none;">
       Join waitlist
     </a>
+
+    </div><!-- /.nav-right -->
   </nav>
 
   <!-- =========================================================
@@ -369,13 +446,6 @@
              rel="noopener noreferrer">
             <div class="contact-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#ig-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <defs>
-                <linearGradient id="ig-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop class="contact-stop-a" offset="0%"   stop-color="#474ED7"/>
-                  <stop class="contact-stop-b" offset="50%"  stop-color="#EC458D"/>
-                  <stop class="contact-stop-c" offset="100%" stop-color="#FFF1BF"/>
-                </linearGradient>
-              </defs>
                 <rect x="2" y="2" width="20" height="20" rx="5"/>
                 <circle cx="12" cy="12" r="5"/>
                 <circle cx="17.5" cy="6.5" r="0.5" fill="url(#ig-grad)" stroke="none"/>
@@ -391,13 +461,6 @@
              aria-label="Email the Pointr team">
             <div class="contact-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="url(#email-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <defs>
-                  <linearGradient id="email-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop class="contact-stop-a" offset="0%"   stop-color="#474ED7"/>
-                    <stop class="contact-stop-b" offset="50%"  stop-color="#EC458D"/>
-                    <stop class="contact-stop-c" offset="100%" stop-color="#FFF1BF"/>
-                  </linearGradient>
-                </defs>
                 <rect x="2" y="4" width="20" height="16" rx="3"/>
                 <polyline points="2,4 12,13 22,4"/>
               </svg>
@@ -405,26 +468,18 @@
             </div>
           </a>
 
-          <!-- St Kilda (location) -->
-          <a href="https://maps.google.com/?q=St+Kilda+Melbourne"
+          <!-- Tik Tok -->
+          <a href="https://www.tiktok.com/@pointr__?_r=1&_t=ZS-973GntUD7o5"
              class="contact-btn"
              role="listitem"
-             aria-label="Pointr is based in St Kilda, Melbourne"
+             aria-label="Pointr Tik Tok Page"
              target="_blank"
              rel="noopener noreferrer">
             <div class="contact-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="url(#location-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <defs>
-                  <linearGradient id="location-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop class="contact-stop-a" offset="0%"   stop-color="#474ED7"/>
-                    <stop class="contact-stop-b" offset="50%"  stop-color="#EC458D"/>
-                    <stop class="contact-stop-c" offset="100%" stop-color="#FFF1BF"/>
-                  </linearGradient>
-                </defs>
-                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/>
-                <circle cx="12" cy="10" r="3"/>
-              </svg>
-              <span class="contact-label">St Kilda</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="url(#tiktok-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+                </svg>
+              <span class="contact-label">Tik Tok</span>
             </div>
           </a>
         </div>

@@ -87,6 +87,7 @@
 
   --radius-pill:   50px;   /* fully rounded pills        */
   --radius-card:   25px;   /* card / icon button         */
+  --radius-md:     20px;
   --radius-sm:     12px;
 
   --border-grad:   3px;    /* 0.1875em gradient border   */
