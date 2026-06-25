@@ -564,9 +564,14 @@ function initContactHover() {
     return `rgb(${Math.round(r1 + (r2 - r1) * amt)},${Math.round(g1 + (g2 - g1) * amt)},${Math.round(b1 + (b2 - b1) * amt)})`;
   }
 
-  const colors = ['#474ED7', '#EC458D', '#FFF1BF'];
+  /* Default Pointr palette — used for Instagram */
+  const POINTR_COLORS = ['#474ED7', '#EC458D', '#FFF1BF'];
+  /* Google palette — used for Email (blue, red, yellow) */
+  const GOOGLE_COLORS = ['#4285F4', '#EA4335', '#FBBC04'];
+  /* TikTok palette — used for TikTok */
+  const TIKTOK_COLORS = ['#25F4EE', '#000000', '#FE2C55'];
 
-  function makeTween(stops, offset) {
+  function makeTween(stops, offset, colors) {
     return gsap.to({}, {
       duration: 2,
       repeat: -1,
@@ -585,17 +590,17 @@ function initContactHover() {
 
   /* ── Nav socials — always-on, pause on hover, resume on leave ── */
   const navGrads = [
-    { id: 'nav-ig-grad',     offset: 0,    linkSelector: '.nav-social-link:nth-child(1)' },
-    { id: 'nav-email-grad',  offset: 0.33, linkSelector: '.nav-social-link:nth-child(2)' },
-    { id: 'nav-tiktok-grad', offset: 0.66, linkSelector: '.nav-social-link:nth-child(3)' },
+    { id: 'nav-ig-grad',           offset: 0,    linkSelector: '.nav-social-link:nth-child(1)', colors: POINTR_COLORS },
+    { id: 'nav-email-grad-google', offset: 0.33, linkSelector: '.nav-social-link:nth-child(2)', colors: GOOGLE_COLORS },
+    { id: 'nav-tiktok-grad-brand', offset: 0.66, linkSelector: '.nav-social-link:nth-child(3)', colors: TIKTOK_COLORS },
   ];
-  navGrads.forEach(({ id, offset, linkSelector }) => {
+  navGrads.forEach(({ id, offset, linkSelector, colors }) => {
     const el = document.getElementById(id);
     if (!el) return;
     const stops = el.querySelectorAll('stop');
     if (!stops.length) return;
 
-    const tween = makeTween(stops, offset);
+    const tween = makeTween(stops, offset, colors);
 
     const link = document.querySelector(linkSelector);
     if (!link) return;
@@ -605,9 +610,9 @@ function initContactHover() {
 
   /* ── Contact buttons — always-on, pause on hover, resume on leave ── */
   const contactGrads = [
-    { id: 'ig-grad',     offset: 0    },
-    { id: 'email-grad',  offset: 0.33 },
-    { id: 'tiktok-grad', offset: 0.66 },
+    { id: 'ig-grad',            offset: 0,    colors: POINTR_COLORS },
+    { id: 'email-grad-google',  offset: 0.33, colors: GOOGLE_COLORS },
+    { id: 'tiktok-grad-brand',  offset: 0.66, colors: TIKTOK_COLORS },
   ];
   document.querySelectorAll('.contact-btn').forEach((btn, i) => {
     const gradDef = contactGrads[i];
@@ -617,7 +622,7 @@ function initContactHover() {
     const stops = el.querySelectorAll('stop');
     if (!stops.length) return;
 
-    const tween = makeTween(stops, gradDef.offset);
+    const tween = makeTween(stops, gradDef.offset, gradDef.colors);
 
     btn.addEventListener('mouseenter', () => tween.pause());
     btn.addEventListener('mouseleave', () => tween.resume());
