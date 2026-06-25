@@ -566,8 +566,8 @@ function initContactHover() {
 
   /* Default Pointr palette — used for Instagram */
   const POINTR_COLORS = ['#474ED7', '#EC458D', '#FFF1BF'];
-  /* Google palette — used for Email (blue, red, yellow) */
-  const GOOGLE_COLORS = ['#4285F4', '#EA4335', '#FBBC04'];
+  /* Google palette — used for Email (blue, green, yellow) */
+  const GOOGLE_COLORS = ['#4285F4', '#34A853', '#FBBC04'];
   /* TikTok palette — used for TikTok */
   const TIKTOK_COLORS = ['#25F4EE', '#000000', '#FE2C55'];
 
